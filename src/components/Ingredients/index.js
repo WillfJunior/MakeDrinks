@@ -1,10 +1,37 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useState, useEffect, useContext } from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { MyDrinksContext } from "../../context/MyDrinksContext";
 import axios from "axios";
 
 import {v4 as uuidv4} from 'uuid';
+import { Feather } from "@expo/vector-icons";
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default function Ingredients({ drink }) {
+  const {drinksLiked, setDrinksLiked, getDrinks, saveDrink, removeDrink} = useContext(MyDrinksContext);
+  
+  useEffect(() => {
+    
+    async function getDrinksStorage() {
+
+      const currentDrinks = await getDrinks();
+      
+      
+      const drinkFinded = currentDrinks.findIndex((d) => d.idDrink == drink.idDrink);
+
+      if(drinkFinded >= 0) {
+        setLike(true);
+      }
+      
+      
+    }
+    
+    getDrinksStorage();
+    
+
+  }, [drink,like]);
 
   let key = '71f258fa847643289815245b16e0ee39';
 
@@ -13,10 +40,8 @@ export default function Ingredients({ drink }) {
     let ingredients = '';
     const [translates, setTranslates] = useState([]);
     const [translate, setTranslate] = useState();
-
-
-
-   
+    const [like, setLike] = useState(false);
+    const [currentDrink, setCurrentDrink] = useState(drink);
 
     for (let i = 1; i <= 15; i++) {
       const ingredient = drink[`strIngredient${i}`];
@@ -29,36 +54,8 @@ export default function Ingredients({ drink }) {
       
     }
 
-    
-
-    // useEffect(() => {
-    //   notNullIngredients.map((ingredient) => {
-    //     translateText(ingredient);
-    //   })
-    // }, [translate, translates]);
-    
-
-    
-
     translateText(ingredients);
-    // translateText(`${drink.strIngredient2} - ${drink.strMeasure2}`)
-    // translateText(`${drink.strIngredient3} - ${drink.strMeasure3}`)
-    // translateText(`${drink.strIngredient4} - ${drink.strMeasure4}`)
-    // translateText(`${drink.strIngredient5} - ${drink.strMeasure5}`)
-    // translateText(`${drink.strIngredient6} - ${drink.strMeasure6}`)
-    // translateText(`${drink.strIngredient7} - ${drink.strMeasure7}`)
-    // translateText(`${drink.strIngredient8} - ${drink.strMeasure8}`)
-    // translateText(`${drink.strIngredient9} - ${drink.strMeasure9}`)
-    // translateText(`${drink.strIngredient10} - ${drink.strMeasure10}`)
-    // translateText(`${drink.strIngredient11} - ${drink.strMeasure11}`)
-    // translateText(`${drink.strIngredient12} - ${drink.strMeasure12}`)
-    // translateText(`${drink.strIngredient13} - ${drink.strMeasure13}`)
-    // translateText(`${drink.strIngredient14} - ${drink.strMeasure14}`)
-    // translateText(`${drink.strIngredient15} - ${drink.strMeasure15}`)
-
-    
-
-
+  
     function translateText(ingredient) {
         
           axios({
@@ -93,13 +90,21 @@ export default function Ingredients({ drink }) {
     }
 
     
-      
-   
     
+    async function handleLike() {
+      setLike((current) => !current);
+      
+      !like ? await saveDrink(drink) : await removeDrink(drink);
+    }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Ingredientes</Text>
+      <View style={styles.likeLine}>
+        <Text style={styles.title}>Ingredientes</Text>
+        <TouchableOpacity style={styles.button}  onPress={handleLike}>
+            <Feather name="heart" size={20} color={like ? 'red' : 'white'}/>
+        </TouchableOpacity>
+      </View>
       <View style={styles.ingredients}>
         {/* {notNullIngredients.map((ingredient, index) => (
           <View key={index} style={styles.ingredient}>
@@ -139,4 +144,12 @@ const styles = StyleSheet.create({
     ingredientText: {
         color: "#fff",
     },
+    likeLine: {
+      justifyContent: "center",
+      flexDirection: "row",
+    },
+    button: {
+      marginLeft: 16,
+      marginTop: 4,
+    }
 });

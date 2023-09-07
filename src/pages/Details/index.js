@@ -2,17 +2,17 @@ import React, {useState, useEffect} from 'react';
 
 import {View, 
     StyleSheet, 
-    TextInput, 
+
     TouchableOpacity, 
     Text, 
-    FlatList,
+
     Image,
     SafeAreaView
 } from 'react-native';
 import Header from '../../components/Header';
 import Ingredients from '../../components/Ingredients';
-import HowToMake from '../../components/howMake';
-import { ScrollView } from 'react-native-gesture-handler';
+
+import { Feather } from "@expo/vector-icons";
 
 export default function Details({navigation, route}) {
 
@@ -33,7 +33,10 @@ export default function Details({navigation, route}) {
     return (
         <SafeAreaView style={styles.container}>
             <Header title={drink.strDrink} />
+            
+            
             <Image style={styles.image} source={{uri: drink.strDrinkThumb}} />
+            
             <Ingredients drink={drink} />
 
             
@@ -62,6 +65,7 @@ container: {
         
     flex:1,
     backgroundColor:"#131016",
+    justifyContent: "center",
 },
 image: {
 
@@ -86,6 +90,9 @@ buttonHowMake:{
     marginBottom: 24,
     
 },
+buttonLike:{
+
+}
 
     
 });

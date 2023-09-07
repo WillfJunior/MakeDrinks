@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from "react";
 
-import { View, StyleSheet, TextInput, TouchableOpacity, Text, FlatList, Image, SafeAreaView } from "react-native";
+import { View, 
+    StyleSheet, 
+    TouchableOpacity, 
+    Text, 
+    FlatList, 
+    Image, 
+    SafeAreaView } from "react-native";
+
+    import Like from "../Like";
+
 
 export default function Card({ drinks, navigation }) {
 
@@ -20,6 +29,8 @@ export default function Card({ drinks, navigation }) {
                     <View style={styles.contentCard}>
                         <Image style={styles.imageCard} source={{ uri: item.strDrinkThumb }} />
                         <Text style={styles.textCard}>{item.strDrink}</Text>
+                       
+                        
                     </View>
                 </TouchableOpacity>
             )}

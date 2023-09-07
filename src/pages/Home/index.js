@@ -1,16 +1,39 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View , StyleSheet, TextInput, TouchableOpacity, Text, Keyboard} from "react-native";
 import Header from "../../components/Header";
+import { MyDrinksContext } from "../../context/MyDrinksContext";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Feather } from "@expo/vector-icons";
 import Card from "../../components/Card";
 
 export default function Home({ navigation }) {
 
+    const { myDrinks, setMyDrinks, keyStorage } = useContext(MyDrinksContext);
     const [drink, setDrink] = useState('');
 
     const [drinks, setDrinks] = useState([]);
+     
+
+    useEffect(() => {
+        async function getDrinksStorage() {
+            const currentDrinks = await getDrinks();
+            setMyDrinks(currentDrinks.length);
+            
+          }
+          
+          
+          getDrinksStorage();
+    }, [myDrinks]);
+
+    
+
+    async function getDrinks() {
+      const existingDrinks = await AsyncStorage.getItem(keyStorage);
+      const currentDrinks = existingDrinks ? JSON.parse(existingDrinks) : [];
+      return currentDrinks;
+    }
 
     function handleGetDrinks() {
         fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${drink}`)
@@ -32,6 +55,16 @@ export default function Home({ navigation }) {
     return (
         <View style={styles.container}>
             <Header title="Drinks" />
+            <TouchableOpacity 
+            style={styles.buttonMyDrinks}
+            onPress={() => navigation.navigate('MyDrinks')}
+            >
+                <Text style={styles.textMyDrinks}>Meus Drinks</Text>
+                <View style={styles.containerAmount}>
+                    <Text style={styles.amountMyDrinks}>{myDrinks}</Text>
+                </View>
+            </TouchableOpacity>
+            
             <View style={styles.form}>
                 <TextInput
                     style={styles.input}
@@ -89,4 +122,32 @@ const styles = StyleSheet.create({
         color:'#FFF',
         fontSize:24
     },
+    buttonMyDrinks:{
+        flexDirection:'row',
+        marginLeft:24,
+        marginBottom: -12,
+        marginTop: 12,
+        alignItems:'center',
+    } ,
+    textMyDrinks:{
+        color:'#fff',
+        fontWeight:'bold',
+    } ,
+    amountMyDrinks:{
+        color:'#fff',
+        fontWeight:'bold',
+        textAlign: 'center',
+    },
+    containerAmount:{
+
+        borderRadius: 50,
+        backgroundColor: '#00875F',
+        borderColor: '#00875F',
+        borderWidth: 2,
+        marginLeft: 8,
+        width: 24,
+        height: 24,
+        alignItems: 'center',
+        justifyContent: 'center',
+    }
 })

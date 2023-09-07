@@ -5,26 +5,48 @@ import {
     Text,
     TouchableOpacity
  } from "react-native";
+ import { useContext, useEffect } from "react";
+import { MyDrinksContext } from "../../context/MyDrinksContext";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
  import { Entypo } from "@expo/vector-icons";
 
 const statusBarHeight = StatusBar.currentHeight ? StatusBar.currentHeight + 22: 64;
 
 export default function Header({ title }) {
+    const { myDrinks, setMyDrinks,getDrinks } = useContext(MyDrinksContext);
+
+    useEffect(() => {
+        async function getDrinksStorage() {
+            const currentDrinks = await getDrinks();
+            setMyDrinks(currentDrinks.length);
+            
+          }
+          
+          
+          getDrinksStorage();
+    }, [myDrinks]);
+
+    
+
+   
     return (
         <View style={styles.container}>
             <View style={styles.content}>
 
-            <TouchableOpacity activeOpacity={0.9} style={styles.buttonUser}>
-                    <Entypo name="drink" size={27} color="#fff" />
-                </TouchableOpacity>
-
-                <Text style={styles.username}>{title}</Text>
-
                 <TouchableOpacity activeOpacity={0.9} style={styles.buttonUser}>
-                    <Entypo name="drink" size={27} color="#fff" />
+                        <Entypo name="drink" size={27} color="#fff" />
+                    </TouchableOpacity>
+
+                    <Text style={styles.username}>{title}</Text>
+
+                    <TouchableOpacity activeOpacity={0.9} style={styles.buttonUser}>
+                        <Entypo name="drink" size={27} color="#fff" />
                 </TouchableOpacity>
+                
             </View>
+            
+           
         </View>
     )
 }
@@ -56,5 +78,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         borderRadius: 22,
-    }
+    },
+    
 });
