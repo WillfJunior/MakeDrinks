@@ -18,7 +18,7 @@ export default function Home({ navigation }) {
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
     const randomDrink = 'random.php';
     const searchDrink = `search.php?s=`;
-    const searchDrinkByName = `?s=${drink}`;
+    const searchDrinkByName = `search.php?s=${drink}`;
     const searchDrinkByIngredient = `filter.php?i=${drink}`;
      
 
@@ -97,7 +97,8 @@ export default function Home({ navigation }) {
     }
 
     function handleDrinkTextChange(text) {
-        setDrink(text);
+        setDrink(text)
+        
     }
 
     return (
