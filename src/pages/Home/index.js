@@ -1,11 +1,11 @@
 
 import React, { useState, useEffect, useContext } from "react";
-import { View , StyleSheet, TextInput, TouchableOpacity, Text, Keyboard} from "react-native";
+import { View , StyleSheet, TextInput, TouchableOpacity, Text, Keyboard, Switch, Alert} from "react-native";
 import Header from "../../components/Header";
 import { MyDrinksContext } from "../../context/MyDrinksContext";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { Feather } from "@expo/vector-icons";
+import { Feather, Entypo } from "@expo/vector-icons";
 import Card from "../../components/Card";
 
 export default function Home({ navigation }) {
@@ -14,6 +14,12 @@ export default function Home({ navigation }) {
     const [drink, setDrink] = useState('');
 
     const [drinks, setDrinks] = useState([]);
+    const [isEnabled, setIsEnabled] = useState(false);
+    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+    const randomDrink = 'random.php';
+    const searchDrink = `search.php?s=`;
+    const searchDrinkByName = `?s=${drink}`;
+    const searchDrinkByIngredient = `filter.php?i=${drink}`;
      
 
     useEffect(() => {
@@ -25,6 +31,8 @@ export default function Home({ navigation }) {
           
           
           getDrinksStorage();
+          GetAllDrinks(searchDrink);
+          //SortedDrinks();
     }, [myDrinks]);
 
     
@@ -35,17 +43,57 @@ export default function Home({ navigation }) {
       return currentDrinks;
     }
 
-    function handleGetDrinks() {
-        fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${drink}`)
+    function SortedDrinks(drinkArray) {
+        
+        for (let i = 0; i < drinkArray.length - 1; i++) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [drinkArray[i], drinkArray[j]] = [drinkArray[j], drinkArray[i]];
+        }
+        return drinkArray;
+    }
+
+    function GetAllDrinks(filter) {
+        fetch(`https://www.thecocktaildb.com/api/json/v1/1/${filter}`)
         .then((response) => response.json())
         .then((json) => {
-            setDrinks(json.drinks);
-            setDrink('');
-            Keyboard.dismiss();
+
+            if(filter === 'search.php?=') {
+                const drinkArray = SortedDrinks(json.drinks);
+                const drinksSlice = drinkArray.slice(0, 10);
+                setDrinks(drinksSlice);
+            } else {
+                setDrinks(json.drinks);
+            }
+            
         })
         .catch((error) => {
             console.error(error);
         });
+    }
+
+    function handleSuggestDrinks() {
+        GetAllDrinks(randomDrink);
+    }
+
+    function handleGetDrinks() {
+        if(drink === '') {
+            alert('Digite o nome do drink ou ingrediente');
+        }
+            
+        else if(isEnabled ) {
+            GetAllDrinks(searchDrinkByIngredient);
+            
+        }  
+        else {
+            GetAllDrinks(searchDrinkByName);
+            
+            
+        }
+        setDrink('');
+            Keyboard.dismiss();
+            
+        
+        
     }
 
     function handleDrinkTextChange(text) {
@@ -65,20 +113,36 @@ export default function Home({ navigation }) {
                 </View>
             </TouchableOpacity>
             
-            <View style={styles.form}>
-                <TextInput
-                    style={styles.input}
-                    placeholder='Busque o seu Drink Favorito'
-                    placeholderTextColor='#6B6B6B'
-                    onChangeText={(text) => handleDrinkTextChange(text)}
-                    
-                    value={drink}
-                    
-                />
+            <View style={styles.formContainer}>
+                <View style={styles.buscarIngrediente}>
+                    <Text style={styles.buscarIngredienteText}>Buscar Por Ingrediente ?</Text>
+                    <Switch
+                        trackColor={{false: '#767577', true: '#FFF'}}
+                        thumbColor={isEnabled ? '#00875F' : '#f4f3f4'}
+                        ios_backgroundColor="#3e3e3e"
+                        onValueChange={toggleSwitch}
+                        value={isEnabled}
+                    />
+                </View>
+                <View style={styles.form}>
+                    <TextInput
+                        style={styles.input}
+                        placeholder={isEnabled ? 'Busque seu Drink pelo Ingrediente' :'Busque o seu Drink Favorito'}
+                        placeholderTextColor='#6B6B6B'
+                        onChangeText={(text) => handleDrinkTextChange(text)}
+                        
+                        value={drink}
+                        
+                    />
 
-                <TouchableOpacity style={styles.button} onPress={handleGetDrinks} >
-                    <Text style={styles.buttonText}><Feather name="search" size={20} color="#fff"/></Text>
-                </TouchableOpacity>
+                    <TouchableOpacity style={styles.button} onPress={handleGetDrinks} >
+                        <Text style={styles.buttonText}><Feather name="search" size={20} color="#fff"/></Text>
+                    </TouchableOpacity>
+                    
+                </View>
+                <TouchableOpacity style={styles.buttonSuggest} onPress={handleSuggestDrinks} >
+                        <Text style={styles.buttonSuggestText}>Sugestão de Drink<Entypo name="drink" size={20} color="#fff"/></Text>
+                    </TouchableOpacity>
             </View>
 
             <Card drinks={drinks} navigation={navigation} />
@@ -101,9 +165,9 @@ const styles = StyleSheet.create({
         alignItems:'center',
         justifyContent:'center'
     },
-    form:{
+    formContainer:{
         width:'100%',
-        flexDirection:'row',
+        flexDirection:'column',
         marginTop:36,
         marginBottom:42,
         paddingHorizontal:24
@@ -149,5 +213,33 @@ const styles = StyleSheet.create({
         height: 24,
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    buscarIngrediente:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+        alignItems:'center', 
+    } ,
+    buscarIngredienteText:{
+        color:'#fff',
+        fontWeight:'bold',
+        marginRight: 64,
+    },
+    form:{
+        flexDirection:'row',
+    },
+    buttonSuggest:{
+        backgroundColor:'#00875F',
+        width:'100%',
+        height:40,
+        borderRadius:5,
+        marginTop:12,
+        alignItems:'center',
+        justifyContent:'center'
+    },
+    buttonSuggestText:{
+        color:'#fff',
+        fontSize:16,
+        fontWeight:'bold',
+        textAlign:'center',
     }
 })

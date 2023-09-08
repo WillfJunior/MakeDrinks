@@ -29,9 +29,21 @@ export default function MyDrinks({ navigation}) {
     return (
         <View style={styles.container}>
             <Header title="My Drinks" />
-            <View style={styles.cards}>
-                <Card drinks={drinks} navigation={navigation} />
-            </View>
+            {
+                drinks.length === 0 ? (
+                    <View style={styles.noDrinks}>
+                        <Text style={styles.noDrinksText}>
+                            Você ainda não tem drinks salvos
+                        </Text>
+                    </View>
+                ) : 
+                (
+                    <View style={styles.cards}>
+                        <Card drinks={drinks} navigation={navigation} />
+                    </View>
+                )
+            }
+            
             <View style={styles.buttonBackView}>
                 <TouchableOpacity 
                     onPress={() => navigation.navigate('Home')}
@@ -66,5 +78,16 @@ const styles = StyleSheet.create({
         alignItems: 'end',
         flex: 1,
         justifyContent: 'flex-end',
+    },
+    noDrinks: {
+        flex: 1,
+        marginTop: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    noDrinksText: {
+        color: '#21222c',
+        fontSize: 18,
+        textAlign: 'center',
     }
 })

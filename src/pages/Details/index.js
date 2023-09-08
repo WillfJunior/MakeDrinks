@@ -75,7 +75,7 @@ image: {
     resizeMode: 'contain',
 },
 buttonBack:{
-    width: 400,
+    width: '100%',
     height: 50,
     backgroundColor: '#00875F',
     marginRight: 24,
@@ -83,7 +83,7 @@ buttonBack:{
     
 },
 buttonHowMake:{
-    width: 400,
+    width: '100%',
     height: 50,
     backgroundColor: '#E23C44',
     marginRight: 24,

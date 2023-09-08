@@ -43,7 +43,7 @@ export default function Card({ drinks, navigation }) {
 
 const styles = StyleSheet.create({
     container: {
-        
+        flex: 1,
     },
     imageCard: {
         width: 60,

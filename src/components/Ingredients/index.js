@@ -47,8 +47,8 @@ export default function Ingredients({ drink }) {
       const ingredient = drink[`strIngredient${i}`];
       const measure = drink[`strMeasure${i}`];
 
-      if(ingredient) {
-        ingredients += measure ? `${measure}  ${ingredient} : ` : 'a gosto'
+      if(ingredient && measure) {
+        ingredients += `${measure}  ${ingredient} \n ` 
       }
       
       
