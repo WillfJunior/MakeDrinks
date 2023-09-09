@@ -38,6 +38,7 @@ export default function MyDrinks({ navigation}) {
                     </View>
                 ) : 
                 (
+                    console.log(drinks),
                     <View style={styles.cards}>
                         <Card drinks={drinks} navigation={navigation} />
                     </View>
@@ -63,6 +64,7 @@ const styles = StyleSheet.create({
 
     },
     cards: {
+        flex: 1,
         marginTop: 20,
     },
     buttonBack:{

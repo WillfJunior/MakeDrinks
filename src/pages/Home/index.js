@@ -227,6 +227,7 @@ const styles = StyleSheet.create({
     },
     form:{
         flexDirection:'row',
+        marginTop:10
     },
     buttonSuggest:{
         backgroundColor:'#00875F',
