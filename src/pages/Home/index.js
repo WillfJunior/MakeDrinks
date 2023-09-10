@@ -53,6 +53,7 @@ export default function Home({ navigation }) {
     }
 
     function GetAllDrinks(filter) {
+        console.log(filter)
         fetch(`https://www.thecocktaildb.com/api/json/v1/1/${filter}`)
         .then((response) => response.json())
         .then((json) => {
@@ -102,6 +103,14 @@ export default function Home({ navigation }) {
         
     }
 
+    function handleOnPress(){
+        
+        if(!isEnabled){
+            GetAllDrinks(searchDrinkByName)
+        }
+            
+    }
+
    
 
     return (
@@ -134,6 +143,7 @@ export default function Home({ navigation }) {
                         placeholder={isEnabled ? 'Busque seu Drink pelo Ingrediente' :'Busque o seu Drink Favorito'}
                         placeholderTextColor='#6B6B6B'
                         onChangeText={(text) => handleDrinkTextChange(text)}
+                        onKeyPress={() => handleOnPress(drink)}
                         value={drink}
                         
                     />
