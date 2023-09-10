@@ -5,6 +5,7 @@ import { View, StyleSheet, TouchableOpacity, Text} from "react-native";
 import { MyDrinksContext } from "../../context/MyDrinksContext";
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ButtonBack from "../../components/ButtonBack";
 
 export default function MyDrinks({ navigation}) {
     const { myDrinks, setMyDrinks, getDrinks } = useContext(MyDrinksContext);
@@ -38,20 +39,14 @@ export default function MyDrinks({ navigation}) {
                     </View>
                 ) : 
                 (
-                    console.log(drinks),
                     <View style={styles.cards}>
-                        <Card drinks={drinks} navigation={navigation} />
+                        <Card drinks={drinks} navigation={navigation} origin='MyDrinks'/>
                     </View>
                 )
             }
             
             <View style={styles.buttonBackView}>
-                <TouchableOpacity 
-                    onPress={() => navigation.navigate('Home')}
-                    style={styles.buttonBack}
-                    >
-                    <Text style={{color: '#fff', fontSize: 18, textAlign: 'center', marginTop: 12}}>Voltar</Text>
-                </TouchableOpacity>
+                <ButtonBack navigation={navigation} route="Home" />
             </View>
         </View>
     )
@@ -78,7 +73,7 @@ const styles = StyleSheet.create({
     },
     buttonBackView: {
         alignItems: 'end',
-        flex: 1,
+
         justifyContent: 'flex-end',
     },
     noDrinks: {

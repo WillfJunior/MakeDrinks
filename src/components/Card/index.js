@@ -8,13 +8,12 @@ import { View,
     Image, 
     SafeAreaView } from "react-native";
 
-    import Like from "../Like";
 
 
-export default function Card({ drinks, navigation }) {
+export default function Card({ drinks, navigation, origin}) {
 
     return (
-
+        
         <SafeAreaView style={styles.container}>
             <FlatList 
             showsVerticalScrollIndicator={false}
@@ -24,7 +23,7 @@ export default function Card({ drinks, navigation }) {
                 <TouchableOpacity 
                 style={styles.button}
                 activeOpacity={0.9}
-                onPress={() => navigation.navigate('Details', {id: item.idDrink})}
+                onPress={() => navigation.navigate(`Details`, {id: item.idDrink, origin: origin})}
                 >
                     <View style={styles.contentCard}>
                         <Image style={styles.imageCard} source={{ uri: item.strDrinkThumb }} />

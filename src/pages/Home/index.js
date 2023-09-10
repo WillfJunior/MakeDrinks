@@ -57,7 +57,7 @@ export default function Home({ navigation }) {
         .then((response) => response.json())
         .then((json) => {
 
-            if(filter === 'search.php?=') {
+            if(filter === 'search.php?s=') {
                 const drinkArray = SortedDrinks(json.drinks);
                 const drinksSlice = drinkArray.slice(0, 10);
                 setDrinks(drinksSlice);
@@ -97,9 +97,12 @@ export default function Home({ navigation }) {
     }
 
     function handleDrinkTextChange(text) {
+        
         setDrink(text)
         
     }
+
+   
 
     return (
         <View style={styles.container}>
@@ -131,7 +134,6 @@ export default function Home({ navigation }) {
                         placeholder={isEnabled ? 'Busque seu Drink pelo Ingrediente' :'Busque o seu Drink Favorito'}
                         placeholderTextColor='#6B6B6B'
                         onChangeText={(text) => handleDrinkTextChange(text)}
-                        
                         value={drink}
                         
                     />
@@ -145,8 +147,16 @@ export default function Home({ navigation }) {
                         <Text style={styles.buttonSuggestText}>Sugestão de Drink<Entypo name="drink" size={20} color="#fff"/></Text>
                     </TouchableOpacity>
             </View>
-
-            <Card drinks={drinks} navigation={navigation} />
+            {
+                drinks ? (
+                    <Card drinks={drinks} navigation={navigation} origin='Home' />
+                ):
+                (
+                    alert('Nenhum Drink Encontrado')
+                    
+                )
+            }
+            
         </View>
     )
 }
