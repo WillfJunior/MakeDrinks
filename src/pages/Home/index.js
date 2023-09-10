@@ -18,7 +18,7 @@ export default function Home({ navigation }) {
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
     const randomDrink = 'random.php';
     const searchDrink = `search.php?s=`;
-    const searchDrinkByName = `search.php?s=${drink}`;
+    const searchDrinkByName = `search.php?s=`;
     const searchDrinkByIngredient = `filter.php?i=${drink}`;
      
 
@@ -99,17 +99,15 @@ export default function Home({ navigation }) {
 
     function handleDrinkTextChange(text) {
         
+        if(!isEnabled){
+            console.log(text)
+            GetAllDrinks(`${searchDrinkByName}${text}`)
+        }
         setDrink(text)
         
     }
 
-    function handleOnPress(){
-        
-        if(!isEnabled){
-            GetAllDrinks(searchDrinkByName)
-        }
-            
-    }
+    
 
    
 
@@ -143,7 +141,6 @@ export default function Home({ navigation }) {
                         placeholder={isEnabled ? 'Busque seu Drink pelo Ingrediente' :'Busque o seu Drink Favorito'}
                         placeholderTextColor='#6B6B6B'
                         onChangeText={(text) => handleDrinkTextChange(text)}
-                        onKeyPress={() => handleOnPress(drink)}
                         value={drink}
                         
                     />
