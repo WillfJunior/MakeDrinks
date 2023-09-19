@@ -62,9 +62,9 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         paddingHorizontal: 24,
         marginHorizontal: 24,
+        gap: -16,
     },
     textCard: {
-        
         color: "#fff",
     },
 });

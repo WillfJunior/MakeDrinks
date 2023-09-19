@@ -6,7 +6,7 @@ import axios from "axios";
 import {v4 as uuidv4} from 'uuid';
 import { Feather } from "@expo/vector-icons";
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Heart } from "phosphor-react-native";
 
 
 export default function Ingredients({ drink }) {
@@ -102,7 +102,7 @@ export default function Ingredients({ drink }) {
       <View style={styles.likeLine}>
         <Text style={styles.title}>Ingredientes</Text>
         <TouchableOpacity style={styles.button}  onPress={handleLike}>
-            <Feather name="heart" size={20} color={like ? 'red' : 'white'}/>
+            <Heart size={20} color={like ? 'red' : 'white'} weight={like ? 'fill' : 'light'} />
         </TouchableOpacity>
       </View>
       <View style={styles.ingredients}>

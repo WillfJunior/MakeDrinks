@@ -159,7 +159,11 @@ export default function Home({ navigation }) {
                     <Card drinks={drinks} navigation={navigation} origin='Home' />
                 ):
                 (
-                    alert('Nenhum Drink Encontrado')
+                    <View style={styles.noDrinks}>
+                        <Text style={styles.noDrinksText}>
+                            Nenhum drink encontrado
+                        </Text>
+                    </View>
                     
                 )
             }
@@ -260,5 +264,16 @@ const styles = StyleSheet.create({
         fontSize:16,
         fontWeight:'bold',
         textAlign:'center',
+    },
+    noDrinks: {
+        flex: 1,
+        marginTop: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    noDrinksText: {
+        color: '#21222c',
+        fontSize: 18,
+        textAlign: 'center',
     }
 })
